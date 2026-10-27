@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Controller - Monitor 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        /* ================= GLOBAL STYLE ================= */
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ================= LAYAR 1: INPUT OPERATOR ================= */
+        .input-container {
+            width: 85%;
+            max-width: 500px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        h1.op-title {
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+            margin: 0 0 10px 0;
+            font-size: 32px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            font-size: 20px;
+            border-radius: 12px;
+            border: none;
+            text-align: center;
+            font-family: 'Fredoka One', cursive;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-blue {
+            background: linear-gradient(to bottom, #2196F3, #1565C0);
+            background-color: #1565C0;
+        }
+
+        .btn-orange {
+            background: linear-gradient(to bottom, #FF9800, #F57C00);
+            background-color: #F57C00;
+        }
+
+        /* ================= LAYAR 2: LEADERBOARD DENGAN GAMBAR ================= */
+
+        .board-container {
+            position: relative;
+            aspect-ratio: 9 / 16;
+            height: 95vh;
+            max-width: 100vw;
+            background-image: url('assets/images/leaderboard.png');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+        }
+
+        .list-wrapper {
+            position: absolute;
+            top: 26.5%;
+            left: 16%;
+            width: 66%;
+            height: 56.5%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .score-item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            height: 10%;
+            color: #fff;
+            font-size: 2.2vh;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Area Kiri (Ranking & Nama) - SUDAH DIPERBAIKI */
+        .name-area {
+            width: 53%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            /* UPDATE DISINI: Padding dinaikkan jadi 60px agar geser ke kanan */
+            padding-left: 80px; 
+            box-sizing: border-box;
+        }
+
+        .rank-num {
+            min-width: 30px;
+            text-align: center;
+            color: #FFF;
+            /* UPDATE: Tambah margin kanan biar gak nempel nama */
+            margin-right: 10px; 
+        }
+
+        .player-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-transform: uppercase;
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        /* Area Kanan (Score) */
+        .score-area {
+            width: 47%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-right: 5px;
+        }
+
+        .lb-controls {
+            position: absolute;
+            bottom: 5%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .btn-mini {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.8vh;
+            border: 2px solid #fff;
+            cursor: pointer;
+            color: white;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .btn-green {
+            background: #2E7D32;
+        }
+
+        .btn-red {
+            background: #C62828;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="screen-input" class="input-container">
+        <div style="font-size: 50px;">🎮</div>
+        <h1 class="op-title">OPERATOR GAME</h1>
+
+        <input type="text" id="ctrl-name" placeholder="Masukkan Nama Pemain..." autocomplete="off">
+
+        <button id="btn-start" class="btn btn-blue" style="font-size: 20px; padding: 18px;">
+            MULAI GAME DI LAYAR DEPAN
+        </button>
+
+        <div style="width: 100%; height: 1px; background: #444; margin: 5px 0;"></div>
+
+        <button id="btn-to-leaderboard" class="btn btn-orange">
+            🏆 LIHAT LEADERBOARD
+        </button>
+    </div>
+
+    <div id="screen-leaderboard" class="board-container hidden">
+        <div id="lb-list" class="list-wrapper"></div>
+        <div class="lb-controls">
+            <button id="btn-back" class="btn-mini btn-green">🔙 KEMBALI</button>
+            <button id="btn-clear" class="btn-mini btn-red">🗑️ HAPUS</button>
+        </div>
+    </div>
+
+    <script>
+        const gameChannel = new BroadcastChannel('ar_catch_channel');
+
+        const screenInput = document.getElementById('screen-input');
+        const screenLeaderboard = document.getElementById('screen-leaderboard');
+        const nameInput = document.getElementById('ctrl-name');
+        const btnStart = document.getElementById('btn-start');
+        const btnToLB = document.getElementById('btn-to-leaderboard');
+        const lbList = document.getElementById('lb-list');
+        const btnClear = document.getElementById('btn-clear');
+        const btnBack = document.getElementById('btn-back');
+
+        function showInputScreen() {
+            screenLeaderboard.classList.add('hidden');
+            screenInput.classList.remove('hidden');
+            nameInput.focus();
+        }
+
+        function showLeaderboardScreen() {
+            screenInput.classList.add('hidden');
+            screenLeaderboard.classList.remove('hidden');
+            refreshLeaderboardData();
+        }
+
+        btnStart.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                gameChannel.postMessage({ type: 'START_GAME', playerName: name });
+                const originalText = btnStart.innerText;
+                btnStart.innerText = "🚀 GAME DIMULAI...";
+                btnStart.disabled = true;
+
+                setTimeout(() => {
+                    nameInput.value = '';
+                    btnStart.innerText = originalText;
+                    btnStart.disabled = false;
+                    showLeaderboardScreen();
+                }, 1000);
+            } else {
+                alert("Isi nama pemain dulu!");
+                nameInput.focus();
+            }
+        });
+
+        btnToLB.addEventListener('click', showLeaderboardScreen);
+        btnBack.addEventListener('click', showInputScreen);
+
+        btnClear.addEventListener('click', () => {
+            if (confirm("PERINGATAN: Yakin hapus SEMUA history skor?")) {
+                localStorage.removeItem('ar_catch_scores');
+                refreshLeaderboardData();
+            }
+        });
+
+        function refreshLeaderboardData() {
+            lbList.innerHTML = "";
+            let scores = [];
+            try {
+                const raw = localStorage.getItem('ar_catch_scores');
+                if (raw) scores = JSON.parse(raw);
+            } catch (e) { console.error(e); }
+
+            scores.sort((a, b) => b.score - a.score);
+            const MAX_SLOTS = 7;
+
+            for (let i = 0; i < MAX_SLOTS; i++) {
+                const row = document.createElement('div');
+                row.classList.add('score-item');
+                let pName = "-";
+                let pScore = "-";
+
+                if (scores[i]) {
+                    pName = scores[i].name;
+                    pScore = scores[i].score;
+                }
+
+                row.innerHTML = `
+                    <div class="name-area">
+                        <span class="rank-num">${i + 1}</span>
+                        <span class="player-name">${pName}</span>
+                    </div>
+                    <div class="score-area">
+                        ${pScore}
+                    </div>
+                `;
+                lbList.appendChild(row);
+            }
+        }
+
+        // --- UPDATE OTOMATIS TANPA ALERT ---
+        gameChannel.onmessage = (event) => {
+            if (event.data.type === 'GAME_OVER_DONE') {
+                if (screenLeaderboard.classList.contains('hidden')) {
+                    showLeaderboardScreen();
+                }
+                refreshLeaderboardData();
+                console.log("Data skor baru diterima dan diperbarui.");
+            }
+        };
+
+    </script>
+</body>
+
+</html>

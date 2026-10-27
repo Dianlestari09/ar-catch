@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Catch The Flavour - Full Body Portrait</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+</head>
+<body>
+
+    <div id="loading-overlay">
+        <div class="loader"></div>
+        <p>Menyiapkan AI...</p>
+        <p style="font-size: 14px; margin-top: 10px; color: #aaa;">Mundur sedikit agar seluruh tubuh terlihat</p>
+    </div>
+
+    <div id="welcome-screen" class="hidden">
+        <div class="glass-panel">
+            <h1>CATCH THE FLAVOUR</h1>
+            <p style="color: #FFF; margin-bottom: 20px; font-size: 16px;">
+                Pegang keranjang dengan <b>dua tangan</b>.<br>
+                Pastikan tubuhmu terlihat dari kepala sampai kaki.
+            </p>
+            <input type="text" id="player-name-input" placeholder="Nama Pemain..." maxlength="10" autocomplete="off">
+            <button id="btn-enter-game">MULAI MAIN</button>
+        </div>
+    </div>
+
+    <video class="input_video"></video>
+    <canvas class="output_canvas" id="bg-canvas"></canvas>
+
+    <div id="game-container"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
